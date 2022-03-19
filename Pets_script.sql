@@ -20,18 +20,18 @@ USE `petsdb` ;
 DROP TABLE IF EXISTS `petsdb`.`persons` ;
 
 CREATE TABLE IF NOT EXISTS `petsdb`.`persons` (
-  `idpersons` INT NOT NULL,
+  `id` INT NOT NULL,
   `name` VARCHAR(45) NOT NULL,
   `email` VARCHAR(60) NOT NULL,
   `password` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`idpersons`))
+  PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
-CREATE UNIQUE INDEX `idpersons_UNIQUE` ON `petsdb`.`persons` (`idpersons` ASC) VISIBLE;
+CREATE UNIQUE INDEX `id_UNIQUE` ON `petsdb`.`persons` (`id` ASC) VISIBLE;
 
 CREATE UNIQUE INDEX `email_UNIQUE` ON `petsdb`.`persons` (`email` ASC) VISIBLE;
 
-INSERT INTO `persons` (`idpersons`, `name`, `email`, `password`)
+INSERT INTO `persons` (`id`, `name`, `email`, `password`)
 VALUES 
 (1, 'Julia', 'korotkovayuliav@gmail.com', '111'),
 (2, 'Alex', 'Yulia-89@yandex.com', '111');
@@ -42,20 +42,20 @@ SELECT * FROM persons;
 DROP TABLE IF EXISTS `petsdb`.`pets` ;
 
 CREATE TABLE IF NOT EXISTS `petsdb`.`pets` (
-  `idpets` INT NOT NULL,
+  `id` INT NOT NULL,
   `name` VARCHAR(45) NOT NULL,
-  `persons_idpersons` INT NOT NULL,
-  PRIMARY KEY (`idpets`, `persons_idpersons`),
+  `persons_id` INT NOT NULL,
+  PRIMARY KEY (`id`, `persons_id`),
   CONSTRAINT `fk_pets_persons1`
-    FOREIGN KEY (`persons_idpersons`)
-    REFERENCES `petsdb`.`persons` (`idpersons`)
-    ON DELETE NO ACTION
+    FOREIGN KEY (`persons_id`)
+    REFERENCES `petsdb`.`persons` (`id`)
+    ON DELETE SET NULl
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 CREATE UNIQUE INDEX `name_UNIQUE` ON `petsdb`.`pets` (`name` ASC) VISIBLE;
 
-CREATE INDEX `fk_pets_persons1_idx` ON `petsdb`.`pets` (`persons_idpersons` ASC) VISIBLE;
+CREATE INDEX `fk_pets_persons1_idx` ON `petsdb`.`pets` (`persons_id` ASC) VISIBLE;
 
 
 -- -----------------------------------------------------
@@ -64,22 +64,22 @@ CREATE INDEX `fk_pets_persons1_idx` ON `petsdb`.`pets` (`persons_idpersons` ASC)
 DROP TABLE IF EXISTS `petsdb`.`schedule` ;
 
 CREATE TABLE IF NOT EXISTS `petsdb`.`schedule` (
-  `idschedule` INT NOT NULL,
+  `id` INT NOT NULL,
   `time` TIME NOT NULL,
   `note` VARCHAR(200) NULL,
   `completion_mark` TINYINT NULL,
-  `persons_idpersons` INT NOT NULL,
-  PRIMARY KEY (`idschedule`, `persons_idpersons`),
+  `persons_id` INT NOT NULL,
+  PRIMARY KEY (`id`, `persons_id`),
   CONSTRAINT `fk_schedule_persons1`
-    FOREIGN KEY (`persons_idpersons`)
-    REFERENCES `petsdb`.`persons` (`idpersons`)
-    ON DELETE NO ACTION
+    FOREIGN KEY (`persons_id`)
+    REFERENCES `petsdb`.`persons` (`id`)
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-CREATE UNIQUE INDEX `idschedule_UNIQUE` ON `petsdb`.`schedule` (`idschedule` ASC) VISIBLE;
+CREATE UNIQUE INDEX `id_UNIQUE` ON `petsdb`.`schedule` (`id` ASC) VISIBLE;
 
-CREATE INDEX `fk_schedule_persons1_idx` ON `petsdb`.`schedule` (`persons_idpersons` ASC) VISIBLE;
+CREATE INDEX `fk_schedule_persons1_idx` ON `petsdb`.`schedule` (`persons_id` ASC) VISIBLE;
 
 
 -- -----------------------------------------------------
@@ -88,26 +88,27 @@ CREATE INDEX `fk_schedule_persons1_idx` ON `petsdb`.`schedule` (`persons_idperso
 DROP TABLE IF EXISTS `petsdb`.`schedule_has_pets` ;
 
 CREATE TABLE IF NOT EXISTS `petsdb`.`schedule_has_pets` (
-  `schedule_idschedule` INT NOT NULL,
-  `pets_idpets` INT NOT NULL,
-  PRIMARY KEY (`schedule_idschedule`, `pets_idpets`),
+  `schedule_id` INT NOT NULL,
+  `pets_id` INT NOT NULL,
+  PRIMARY KEY (`schedule_id`, `pets_id`),
   CONSTRAINT `fk_schedule_has_pets_schedule`
-    FOREIGN KEY (`schedule_idschedule`)
-    REFERENCES `petsdb`.`schedule` (`idschedule`)
-    ON DELETE NO ACTION
+    FOREIGN KEY (`schedule_id`)
+    REFERENCES `petsdb`.`schedule` (`id`)
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_schedule_has_pets_pets1`
-    FOREIGN KEY (`pets_idpets`)
-    REFERENCES `petsdb`.`pets` (`idpets`)
-    ON DELETE NO ACTION
+    FOREIGN KEY (`pets_id`)
+    REFERENCES `petsdb`.`pets` (`id`)
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-CREATE INDEX `fk_schedule_has_pets_pets1_idx` ON `petsdb`.`schedule_has_pets` (`pets_idpets` ASC) VISIBLE;
+CREATE INDEX `fk_schedule_has_pets_pets1_idx` ON `petsdb`.`schedule_has_pets` (`pets_id` ASC) VISIBLE;
 
-CREATE INDEX `fk_schedule_has_pets_schedule_idx` ON `petsdb`.`schedule_has_pets` (`schedule_idschedule` ASC) VISIBLE;
+CREATE INDEX `fk_schedule_has_pets_schedule_idx` ON `petsdb`.`schedule_has_pets` (`schedule_id` ASC) VISIBLE;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
