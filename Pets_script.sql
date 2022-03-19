@@ -4,22 +4,22 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema petsdb
 -- -----------------------------------------------------
-DROP SCHEMA IF EXISTS `mydb` ;
+DROP SCHEMA IF EXISTS `petsdb` ;
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema petsdb
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
-USE `mydb` ;
+CREATE SCHEMA IF NOT EXISTS `petsdb` DEFAULT CHARACTER SET utf8 ;
+USE `petsdb` ;
 
 -- -----------------------------------------------------
--- Table `mydb`.`persons`
+-- Table `petsdb`.`persons`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`persons` ;
+DROP TABLE IF EXISTS `petsdb`.`persons` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`persons` (
+CREATE TABLE IF NOT EXISTS `petsdb`.`persons` (
   `id` INT NOT NULL,
   `name` VARCHAR(45) NOT NULL,
   `email` VARCHAR(60) NOT NULL,
@@ -27,39 +27,42 @@ CREATE TABLE IF NOT EXISTS `mydb`.`persons` (
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
-CREATE UNIQUE INDEX `id_UNIQUE` ON `mydb`.`persons` (`id` ASC) VISIBLE;
+CREATE UNIQUE INDEX `id_UNIQUE` ON `petsdb`.`persons` (`id` ASC) VISIBLE;
 
-CREATE UNIQUE INDEX `email_UNIQUE` ON `mydb`.`persons` (`email` ASC) VISIBLE;
+CREATE UNIQUE INDEX `email_UNIQUE` ON `petsdb`.`persons` (`email` ASC) VISIBLE;
 
-
+INSERT INTO `persons` (`id`, `name`, `email`, `password`)
+VALUES 
+(1, 'Julia', 'korotkovayuliav@gmail.com', '111'),
+(2, 'Alex', 'Yulia-89@yandex.com', '111');
+SELECT * FROM persons;
 -- -----------------------------------------------------
--- Table `mydb`.`pets`
+-- Table `petsdb`.`pets`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`pets` ;
+DROP TABLE IF EXISTS `petsdb`.`pets` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`pets` (
+CREATE TABLE IF NOT EXISTS `petsdb`.`pets` (
   `id` INT NOT NULL,
   `name` VARCHAR(45) NOT NULL,
   `persons_id` INT NOT NULL,
   PRIMARY KEY (`id`, `persons_id`),
   CONSTRAINT `fk_pets_persons1`
     FOREIGN KEY (`persons_id`)
-    REFERENCES `mydb`.`persons` (`id`)
+    REFERENCES `petsdb`.`persons` (`id`)
     ON DELETE SET NULl
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-CREATE UNIQUE INDEX `name_UNIQUE` ON `mydb`.`pets` (`name` ASC) VISIBLE;
+CREATE UNIQUE INDEX `name_UNIQUE` ON `petsdb`.`pets` (`name` ASC) VISIBLE;
 
-CREATE INDEX `fk_pets_persons1_idx` ON `mydb`.`pets` (`persons_id` ASC) VISIBLE;
-
+CREATE INDEX `fk_pets_persons1_idx` ON `petsdb`.`pets` (`persons_id` ASC) VISIBLE;
 
 -- -----------------------------------------------------
--- Table `mydb`.`schedule`
+-- Table `petsdb`.`schedule`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`schedule` ;
+DROP TABLE IF EXISTS `petsdb`.`schedule` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`schedule` (
+CREATE TABLE IF NOT EXISTS `petsdb`.`schedule` (
   `id` INT NOT NULL,
   `time` TIME NOT NULL,
   `note` VARCHAR(200) NULL,
@@ -68,42 +71,41 @@ CREATE TABLE IF NOT EXISTS `mydb`.`schedule` (
   PRIMARY KEY (`id`, `persons_id`),
   CONSTRAINT `fk_schedule_persons1`
     FOREIGN KEY (`persons_id`)
-    REFERENCES `mydb`.`persons` (`id`)
+    REFERENCES `petsdb`.`persons` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-CREATE UNIQUE INDEX `id_UNIQUE` ON `mydb`.`schedule` (`id` ASC) VISIBLE;
+CREATE UNIQUE INDEX `id_UNIQUE` ON `petsdb`.`schedule` (`id` ASC) VISIBLE;
 
-CREATE INDEX `fk_schedule_persons1_idx` ON `mydb`.`schedule` (`persons_id` ASC) VISIBLE;
-
+CREATE INDEX `fk_schedule_persons1_idx` ON `petsdb`.`schedule` (`persons_id` ASC) VISIBLE;
 
 -- -----------------------------------------------------
--- Table `mydb`.`schedule_has_pets`
+-- Table `petsdb`.`schedule_has_pets`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`schedule_has_pets` ;
+DROP TABLE IF EXISTS `petsdb`.`schedule_has_pets` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`schedule_has_pets` (
+CREATE TABLE IF NOT EXISTS `petsdb`.`schedule_has_pets` (
   `schedule_id` INT NOT NULL,
   `pets_id` INT NOT NULL,
   PRIMARY KEY (`schedule_id`, `pets_id`),
   CONSTRAINT `fk_schedule_has_pets_schedule`
     FOREIGN KEY (`schedule_id`)
-    REFERENCES `mydb`.`schedule` (`id`)
-    ON DELETE NO ACTION
+    REFERENCES `petsdb`.`schedule` (`id`)
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_schedule_has_pets_pets1`
     FOREIGN KEY (`pets_id`)
-    REFERENCES `mydb`.`pets` (`id`)
+    REFERENCES `petsdb`.`pets` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-CREATE INDEX `fk_schedule_has_pets_pets1_idx` ON `mydb`.`schedule_has_pets` (`pets_id` ASC) VISIBLE;
+CREATE INDEX `fk_schedule_has_pets_pets1_idx` ON `petsdb`.`schedule_has_pets` (`pets_id` ASC) VISIBLE;
 
-CREATE INDEX `fk_schedule_has_pets_schedule_idx` ON `mydb`.`schedule_has_pets` (`schedule_id` ASC) VISIBLE;
-
+CREATE INDEX `fk_schedule_has_pets_schedule_idx` ON `petsdb`.`schedule_has_pets` (`schedule_id` ASC) VISIBLE;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
