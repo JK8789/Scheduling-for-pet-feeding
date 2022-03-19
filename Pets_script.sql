@@ -20,7 +20,7 @@ USE `petsdb` ;
 DROP TABLE IF EXISTS `petsdb`.`persons` ;
 
 CREATE TABLE IF NOT EXISTS `petsdb`.`persons` (
-  `id` INT NOT NULL,
+  `id` INT,
   `name` VARCHAR(45) NOT NULL,
   `email` VARCHAR(60) NOT NULL,
   `password` VARCHAR(45) NOT NULL,
@@ -35,7 +35,9 @@ INSERT INTO `persons` (`id`, `name`, `email`, `password`)
 VALUES 
 (1, 'Julia', 'korotkovayuliav@gmail.com', '111'),
 (2, 'Alex', 'Yulia-89@yandex.com', '111');
-SELECT * FROM persons;
+-- SELECT * FROM persons;
+
+
 -- -----------------------------------------------------
 -- Table `petsdb`.`pets`
 -- -----------------------------------------------------
@@ -44,18 +46,25 @@ DROP TABLE IF EXISTS `petsdb`.`pets` ;
 CREATE TABLE IF NOT EXISTS `petsdb`.`pets` (
   `id` INT NOT NULL,
   `name` VARCHAR(45) NOT NULL,
-  `persons_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `persons_id`),
+  `persons_id` INT,
+  PRIMARY KEY (`id`),
   CONSTRAINT `fk_pets_persons1`
     FOREIGN KEY (`persons_id`)
     REFERENCES `petsdb`.`persons` (`id`)
-    ON DELETE SET NULl
+    ON DELETE SET NULL
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 CREATE UNIQUE INDEX `name_UNIQUE` ON `petsdb`.`pets` (`name` ASC) VISIBLE;
 
 CREATE INDEX `fk_pets_persons1_idx` ON `petsdb`.`pets` (`persons_id` ASC) VISIBLE;
+
+INSERT INTO `pets` (`id`, `name`, `persons_id`)
+VALUES 
+(1, 'Felix', 1),
+(2, 'Kesha', 1),
+(3, 'Piton', 2);
+-- SELECT * FROM pets;
 
 -- -----------------------------------------------------
 -- Table `petsdb`.`schedule`
@@ -79,6 +88,13 @@ ENGINE = InnoDB;
 CREATE UNIQUE INDEX `id_UNIQUE` ON `petsdb`.`schedule` (`id` ASC) VISIBLE;
 
 CREATE INDEX `fk_schedule_persons1_idx` ON `petsdb`.`schedule` (`persons_id` ASC) VISIBLE;
+
+INSERT INTO `schedule` (`id`, `time`, `note`, `completion_mark`, `persons_id`)
+VALUES 
+(1, '8:00', 'milk', 0, 1),
+(2, '8:00', 'corn', 0, 1),
+(3, '21:00', 'mouse', 0, 2);
+-- SELECT * FROM `schedule`;
 
 -- -----------------------------------------------------
 -- Table `petsdb`.`schedule_has_pets`
@@ -104,6 +120,16 @@ ENGINE = InnoDB;
 CREATE INDEX `fk_schedule_has_pets_pets1_idx` ON `petsdb`.`schedule_has_pets` (`pets_id` ASC) VISIBLE;
 
 CREATE INDEX `fk_schedule_has_pets_schedule_idx` ON `petsdb`.`schedule_has_pets` (`schedule_id` ASC) VISIBLE;
+
+INSERT INTO `schedule_has_pets` (`schedule_id`, `pets_id`)
+VALUES 
+(1, 1),
+(2, 1),
+(3, 2);
+
+-- SELECT `schedule`.`id`, `schedule`.`time`, `schedule`.`note`, `schedule`.`completion_mark`, `schedule`.`persons_id` AS `Feeder`,  `pets`.`name`, `pets`.`persons_id` AS `Owner`
+-- FROM `schedule`
+-- JOIN `pets` ON `schedule`.`id`=`pets`.`id`;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
