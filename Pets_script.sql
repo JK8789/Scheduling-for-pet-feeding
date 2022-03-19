@@ -57,7 +57,6 @@ CREATE UNIQUE INDEX `name_UNIQUE` ON `petsdb`.`pets` (`name` ASC) VISIBLE;
 
 CREATE INDEX `fk_pets_persons1_idx` ON `petsdb`.`pets` (`persons_id` ASC) VISIBLE;
 
-
 -- -----------------------------------------------------
 -- Table `petsdb`.`schedule`
 -- -----------------------------------------------------
@@ -80,7 +79,6 @@ ENGINE = InnoDB;
 CREATE UNIQUE INDEX `id_UNIQUE` ON `petsdb`.`schedule` (`id` ASC) VISIBLE;
 
 CREATE INDEX `fk_schedule_persons1_idx` ON `petsdb`.`schedule` (`persons_id` ASC) VISIBLE;
-
 
 -- -----------------------------------------------------
 -- Table `petsdb`.`schedule_has_pets`
@@ -106,7 +104,6 @@ ENGINE = InnoDB;
 CREATE INDEX `fk_schedule_has_pets_pets1_idx` ON `petsdb`.`schedule_has_pets` (`pets_id` ASC) VISIBLE;
 
 CREATE INDEX `fk_schedule_has_pets_schedule_idx` ON `petsdb`.`schedule_has_pets` (`schedule_id` ASC) VISIBLE;
-
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
