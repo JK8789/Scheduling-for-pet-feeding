@@ -2,7 +2,6 @@ package com.epam.dao;
 
 import com.epam.domain.Person;
 
-import java.math.BigInteger;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +15,7 @@ public class PersonDaoImpl implements PersonDao {
     }
 
     @Override
-    public Optional<Person> getById(BigInteger Id) {
+    public Optional<Person> getById(Integer Id) {
         return Optional.empty();
     }
 
@@ -32,7 +31,5 @@ public class PersonDaoImpl implements PersonDao {
 
     @Override
     public void delete(Person person) {
-
     }
-
 }

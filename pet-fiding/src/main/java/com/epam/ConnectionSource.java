@@ -1,23 +1,17 @@
 package com.epam;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Objects;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 public class ConnectionSource {
-    // JDBC driver name and database URL
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     private static final String DB_URL = "jdbc:mysql://localhost:3306/petsdb";
-
-    //  Database credentials
-    private static final String USER = "root";
-    private static final String PASS = "password";
-
     private static final ConnectionSource instance = new ConnectionSource();
 
     public static ConnectionSource instance() {
@@ -25,23 +19,40 @@ public class ConnectionSource {
     }
 
     public Connection createConnection() throws SQLException {
-        return DriverManager.getConnection(DB_URL, USER, PASS);
+        try (InputStream input = new FileInputStream("resurces/DBconfig.properties")) {
+            Properties prop = new Properties();
+            prop.load(input);
+            return DriverManager.getConnection(DB_URL,
+                    prop.getProperty("db.user"), prop.getProperty("db.password"));
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 
     private ConnectionSource() {
 
-        try {
+        try (InputStream input = new FileInputStream("resurces/DBconfig.properties")) {
+            Properties prop = new Properties();
+            prop.load(input);
+
             DriverManager.registerDriver(new com.mysql.jdbc.Driver());
 
-            try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            try (Connection conn = DriverManager.getConnection(DB_URL,
+                                                               prop.getProperty("db.user"),
+                                                               prop.getProperty("db.password"))) {
                 try (Statement statement = conn.createStatement()) {
-                    statement.execute(getSql("PetFeeding.sql"));
+                    statement.execute(getSql("pet_script.sql"));
+                    System.out.println("Database is Connected");
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.out.println("Database is Not Connected");
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
     }
 
     private static String getSql(final String resourceName) {
@@ -51,10 +62,5 @@ public class ConnectionSource {
                                 ConnectionSource.class.getClassLoader().getResourceAsStream(resourceName))))
                 .lines()
                 .collect(Collectors.joining("\n"));
-    }
-
-    public static void main(String[] args){
-        System.out.println("Hello");
-
     }
 }
