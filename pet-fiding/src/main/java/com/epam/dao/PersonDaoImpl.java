@@ -8,7 +8,9 @@ import java.util.Optional;
 
 public class PersonDaoImpl implements PersonDao {
     private Connection connection;
-    private static final String GET_ONE = "SELECT ID, NAME, EMAIL, PASSWORD FROM PERSON WHERE ID = ?";
+    private static final String GET_ONE = "SELECT ID, NAME, EMAIL, PASSWORD FROM person WHERE ID = ?";
+    private static final String INSERT = "INSERT INTO person (id, name," +
+            "email, password) VALUES (?, ?, ?, ?)";
 
     public PersonDaoImpl(Connection connection) {
         this.connection = connection;
@@ -25,7 +27,7 @@ public class PersonDaoImpl implements PersonDao {
     }
 
     @Override
-    public Person save(Person person) {
+    public Person create(Person person) {
         return null;
     }
 
