@@ -1,18 +1,17 @@
 package com.epam.dao;
 
-import com.epam.ConnectionSource;
-
+import com.epam.hikari.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 public class DaoFactory {
-    private ConnectionSource connectionSource;
+    private DataSource dataSource;
     private Connection connection;
     private PersonDao personDao;
 
     public DaoFactory() throws SQLException {
-        connectionSource = ConnectionSource.instance();
-        connection = connectionSource.createConnection();
+        dataSource = DataSource.instance();
+        connection = (Connection) dataSource.getConnection();
         personDao = new PersonDaoImpl(connection);
     }
 

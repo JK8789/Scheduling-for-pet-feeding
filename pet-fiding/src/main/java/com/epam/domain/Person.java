@@ -1,5 +1,7 @@
 package com.epam.domain;
 
+import com.epam.hikari.DataSource;
+
 public class Person {
     private Integer id;
     private String name;
