@@ -1,15 +1,12 @@
 package com.epam.hikari;
 
+import com.epam.dao.PersonDaoImpl;
 import com.epam.domain.Person;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class DataSource {
     static HikariConfig config = new HikariConfig("src/main/resources/hikari.properties");
@@ -20,7 +17,8 @@ public class DataSource {
         return instance;
     }
 
-    private DataSource(){}
+    private DataSource() {
+    }
 
 //    public static List<Person> fetchData() {
 //
@@ -51,6 +49,10 @@ public class DataSource {
 
     public static void main(String[] args) {
         //fetchData();
+    System.out.println("getById: " + PersonDaoImpl.instance().getById(1));
+        System.out.println("getALL: " + PersonDaoImpl.instance().getAll());
+
+        System.out.println("getByEmail: " + PersonDaoImpl.instance().getByEmail("Yulia-89@yandex.com"));
 
     }
 
