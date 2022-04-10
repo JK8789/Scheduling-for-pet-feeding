@@ -1,7 +1,5 @@
 package com.epam.domain;
 
-import com.epam.hikari.DataSource;
-
 public class Person {
     private Integer id;
     private String name;
@@ -42,6 +40,6 @@ public class Person {
 
     @Override
     public String toString() {
-        return String.format("Person [id=%d, name=%s, email=%s, password=%s]",id, name, email, password);
+        return String.format("Person [id=%d, name=%s, email=%s, password=%s]", id, name, email, password);
     }
 }
