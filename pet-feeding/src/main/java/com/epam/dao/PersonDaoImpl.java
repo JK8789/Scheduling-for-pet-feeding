@@ -2,14 +2,11 @@ package com.epam.dao;
 
 import com.epam.domain.Person;
 import com.epam.hikari.DataSource;
-
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +22,7 @@ public class PersonDaoImpl implements PersonDao {
 
     private PersonDaoImpl() {}
 
-    public static PersonDaoImpl instance() {
+    public static PersonDao instance() {
         return instance;
     }
 
@@ -59,24 +56,24 @@ public class PersonDaoImpl implements PersonDao {
 
     @Override
     public List<Person> getAll() {
-        LinkedList<Person> result = new LinkedList<Person>();
+        ArrayList<Person> persons = new ArrayList<Person>();
         try (Connection connection = DataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(GET_ALL)) {
             Person person;
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
                 person = new Person();
-                person.setId(rs.getInt("id"));
+                 person.setId(rs.getInt("id"));
                 person.setName(rs.getString("name"));
                 person.setEmail(rs.getString("email"));
                 person.setPassword(rs.getString("password"));
-                result.add(person);
+                persons.add(person);
             }
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println(e + "GET_ALL persons is NOT fetched");
         }
-        return result;
+        return persons;
     }
 
     @Override
@@ -108,6 +105,7 @@ public class PersonDaoImpl implements PersonDao {
 
         }
     }
+
     public Optional<Person> getByEmail(String email) {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(GET_BY_EMAIL)) {
