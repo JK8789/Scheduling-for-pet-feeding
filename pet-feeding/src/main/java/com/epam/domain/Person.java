@@ -1,5 +1,8 @@
 package com.epam.domain;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Person {
     private Integer id;
     private String name;
@@ -40,6 +43,16 @@ public class Person {
 
     @Override
     public String toString() {
-        return String.format("Person [id=%d, name=%s, email=%s, password=%s]", id, name, email, password);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("id", id);
+            jsonObject.put("name", name);
+            jsonObject.put("email", email);
+            jsonObject.put("password", password);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        return jsonObject.toString();
+        //return String.format("Person [id=%d, name=%s, email=%s, password=%s]", id, name, email, password);
     }
 }

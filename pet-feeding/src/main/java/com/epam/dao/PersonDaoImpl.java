@@ -2,6 +2,7 @@ package com.epam.dao;
 
 import com.epam.domain.Person;
 import com.epam.hikari.DataSource;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,10 +18,11 @@ public class PersonDaoImpl implements PersonDao {
     private static final String INSERT = "INSERT INTO persons (id, name," +
             "email, password) VALUES (?, ?, ?, ?)";
     private static final String DELETE = "DELETE FROM persons WHERE id = ?";
-    private static final String GET_BY_EMAIL =  "SELECT ID, NAME, EMAIL, PASSWORD FROM persons WHERE EMAIL = ?";
+    private static final String GET_BY_EMAIL = "SELECT ID, NAME, EMAIL, PASSWORD FROM persons WHERE EMAIL = ?";
 
 
-    private PersonDaoImpl() {}
+    private PersonDaoImpl() {
+    }
 
     public static PersonDao instance() {
         return instance;
@@ -29,7 +31,7 @@ public class PersonDaoImpl implements PersonDao {
     @Override
     public Optional<Person> getById(Integer id) {
         try (Connection connection = DataSource.getConnection();
-                PreparedStatement statement = connection.prepareStatement(GET_ONE)) {
+             PreparedStatement statement = connection.prepareStatement(GET_ONE)) {
             statement.setInt(1, id);
             ResultSet rs = statement.executeQuery();
             Person person = new Person();
@@ -39,13 +41,6 @@ public class PersonDaoImpl implements PersonDao {
                 person.setEmail(rs.getString("email"));
                 person.setPassword(rs.getString("password"));
             }
-//            JSONObject jsonObject = new JSONObject();
-//            jsonObject.put("id", rs.getInt("ID"));
-//            jsonObject.put("name", rs.getString("name"));
-//            jsonObject.put("email", rs.getString("email"));
-//            jsonObject.put("password", rs.getString("password"));
-//            Person person = Person.Parser.parseJson(jsonObject.toString());
-
             return Optional.of(person);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -63,7 +58,7 @@ public class PersonDaoImpl implements PersonDao {
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
                 person = new Person();
-                 person.setId(rs.getInt("id"));
+                person.setId(rs.getInt("id"));
                 person.setName(rs.getString("name"));
                 person.setEmail(rs.getString("email"));
                 person.setPassword(rs.getString("password"));
