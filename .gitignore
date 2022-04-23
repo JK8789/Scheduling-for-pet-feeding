@@ -1,1 +1,3 @@
-pet-feeding/.idea/ pet-feeding/target/
+pet-feeding/.idea/
+pet-feeding/target/
+pet-feeding/src/main/WebContent/WEB-INF/hikari.properties

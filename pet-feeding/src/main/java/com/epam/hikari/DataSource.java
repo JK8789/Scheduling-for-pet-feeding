@@ -9,7 +9,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public class DataSource {
-    static HikariConfig config = new HikariConfig("hikari.properties");
+    static HikariConfig config = new HikariConfig("/hikari.properties");
     static HikariDataSource ds = new HikariDataSource(config);
     private static final DataSource instance = new DataSource();
 
