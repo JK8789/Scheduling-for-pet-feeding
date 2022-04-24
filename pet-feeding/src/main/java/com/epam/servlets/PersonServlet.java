@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,8 +21,12 @@ public class PersonServlet extends HttpServlet {
         Enumeration<String> parameterList = req.getParameterNames();
         if (!parameterList.hasMoreElements()) {
             List<Person> persons = PersonServiceImpl.instance().getAll();
-            req.setAttribute("persons", persons);
-            req.getRequestDispatcher("/person.jsp").forward(req, resp);
+            PrintWriter out = resp.getWriter();
+            resp.setContentType("application/json");
+            resp.setCharacterEncoding("UTF-8");
+            out.println(persons.toString());
+//            req.setAttribute("persons", persons);
+//            req.getRequestDispatcher("html/person.jsp").forward(req, resp);
             return;
         }
         if (parameterList.hasMoreElements()) {
@@ -41,9 +46,14 @@ public class PersonServlet extends HttpServlet {
                 if (person.isPresent()){
                     persons.add(person.get());
                 }
-                req.setAttribute("persons", persons);
-                req.getRequestDispatcher("/person.jsp").forward(req, resp);
+                PrintWriter out = resp.getWriter();
+                resp.setContentType("application/json");
+                resp.setCharacterEncoding("UTF-8");
+                out.println(persons);
+//                req.setAttribute("persons", persons);
+//                req.getRequestDispatcher("html/person.jsp").forward(req, resp);
                 return;
+
             } else if (firstParameter.equals("email")) {
                 String[] parameterValueList = req.getParameterValues("email");
                 String firstParamValue = parameterValueList[0];
@@ -52,8 +62,12 @@ public class PersonServlet extends HttpServlet {
                 if (person.isPresent()){
                     persons.add(person.get());
                 }
-                req.setAttribute("persons", persons);
-                req.getRequestDispatcher("/person.jsp").forward(req, resp);
+                PrintWriter out = resp.getWriter();
+                resp.setContentType("application/json");
+                resp.setCharacterEncoding("UTF-8");
+                out.println(persons);
+//                req.setAttribute("persons", persons);
+//                req.getRequestDispatcher("html/person.jsp").forward(req, resp);
                 return;
             }
         }
